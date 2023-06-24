@@ -10,4 +10,11 @@ You can install this on your PicoBoy by downloading the collection of .uf2 files
 ## How can I revert back to PicoBoy OS?
 You can revert back to PicoBoy OS by following these steps: Download the latest Micropython image from this [link]([url](https://micropython.org/download/rp2-pico/)). While holding the "BOOTSEL" button on your PicoBoy, plug your PicoBoy into your computer. A storage drive should appear. Drag the file you just downloaded onto the drive. Once the drive unmounts, you should be back on PicoBoy OS.
 
+# Devlog:
+## 6/24/23
+- Example programs run successfully
+- Only the left button works, all others do not
+- Sound works
+- Only Picosystem SDK has successfully compiled
+
 # THIS IS STILL IN BETA! RUN THIS SOFTWARE AT YOUR OWN RISK!
