@@ -17,4 +17,7 @@ You can revert back to PicoBoy OS by following these steps: Download the latest 
 - Sound works
 - Only Picosystem SDK has successfully compiled
 
+# Credits:
+## Pimoroni
+- Originally Sourced Picosystem SDK (Modified)
 # THIS IS STILL IN BETA! RUN THESE GAMES AT YOUR OWN RISK!
