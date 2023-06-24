@@ -1,5 +1,5 @@
-# PicoBoy-32Blit-Compatibility
-This is a modified version of the 32Blit SDK that can run on a PicoBoy. Keep in mind that this software is still in beta, so it won't be entirely stable.
+# PicoBoy-32Blit\Picosystem-Compatibility
+This is a modified version of the 32Blit/Picosysten SDK that can run on a PicoBoy. Keep in mind that this software is still in beta, so it won't be entirely stable.
 
 ## What is this?
 This is a modified version of the 32Blit SDK that can run on a PicoBoy. This means that the PicoBoy can run 32Blit/Picosystem games, opening up a huge library to the PicoBoy. 
