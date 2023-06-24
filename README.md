@@ -1,4 +1,4 @@
-# PicoBoy-32Blit\Picosystem-Compatibility
+# PicoBoy-32Blit/Picosystem-Compatibility
 This is a modified version of the 32Blit/Picosysten SDK that can run on a PicoBoy. Keep in mind that this software is still in beta, so it won't be entirely stable.
 
 ## What is this?
