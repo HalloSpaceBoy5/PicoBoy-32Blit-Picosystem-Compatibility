@@ -1,7 +1,7 @@
 ## This is an offshoot of the PicoBoy project. The link to the project is here: https://github.com/HalloSpaceBoy5/PicoBoy
 
 # PicoBoy-32Blit/Picosystem-Compatibility
-This is a modified version of the 32Blit/Picosysten SDK that can run on a PicoBoy. Keep in mind that this software is still in beta, so it won't be entirely stable. The original source files are not mine, I did not create them. I have modified the to work on the PicoBoy. You can find the original files [here](https://github.com/pimoroni/picosystem/tree/main).
+This is a modified version of the 32Blit/Picosysten SDK that can run on a PicoBoy. Keep in mind that this software is still in beta, so it won't be entirely stable. The original source files are not mine, I did not create them. I have modified them to work on the PicoBoy. You can find the original files [here](https://github.com/pimoroni/picosystem/tree/main).
 
 ## What is this?
 This is a modified version of the 32Blit/Picosystem SDK that can run on a PicoBoy. This means that the PicoBoy can run 32Blit/Picosystem games, opening up a huge library to the PicoBoy. 
