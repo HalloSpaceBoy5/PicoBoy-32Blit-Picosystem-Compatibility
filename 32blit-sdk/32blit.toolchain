@@ -1,0 +1,91 @@
+set(CMAKE_SYSTEM_NAME Generic)
+set(CMAKE_SYSTEM_PROCESSOR arm)
+
+set(CMAKE_C_COMPILER arm-none-eabi-gcc CACHE PATH "Path to C compiler")
+set(CMAKE_CXX_COMPILER arm-none-eabi-g++ CACHE PATH "Path to C++ compiler")
+
+find_program(CMAKE_SIZE NAMES arm-none-eabi-size)
+find_program(CMAKE_READELF NAMES arm-none-eabi-readelf) # handled by CMake in 3.16+
+
+set(MCU_LINKER_SCRIPT STM32H750VBTx.ld)
+set(MCU_LINKER_FLAGS_INT -Wl,--defsym=FLASH_TARGET_INT=1)
+set(MCU_ARCH cortex-m7)
+set(MCU_FLOAT_ABI hard)
+set(MCU_FPU fpv5-d16)
+set(MCU_FLAGS "-mcpu=${MCU_ARCH} -mthumb -mfloat-abi=${MCU_FLOAT_ABI} ")
+
+if (MCU_FLOAT_ABI STREQUAL hard)
+    set(MCU_FLAGS "${MCU_FLAGS} -mfpu=${MCU_FPU}")
+endif ()
+
+set(CDC_FIFO_BUFFERS 64)
+
+set(COMMON_FLAGS "${MCU_FLAGS} -fsingle-precision-constant -Wall -fdata-sections -ffunction-sections -Wattributes -Wdouble-promotion -Werror=double-promotion -mno-pic-data-is-text-relative -mno-single-pic-base")
+
+set(CMAKE_C_FLAGS_INIT "${COMMON_FLAGS}")
+set(CMAKE_CXX_FLAGS_INIT "${COMMON_FLAGS} -fno-exceptions")
+set(CMAKE_C_FLAGS_DEBUG_INIT "-g -Og")
+set(CMAKE_CXX_FLAGS_DEBUG_INIT "-g -Og")
+#set(CMAKE_EXE_LINKER_FLAGS_INIT "-specs=nano.specs -T ${MCU_LINKER_SCRIPT} -Wl,--gc-sections")
+
+set(CMAKE_EXE_LINKER_FLAGS_INIT "-specs=nosys.specs -Wl,--gc-sections,--no-wchar-size-warning")
+
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+
+# stdlibs
+set(STDLIB_HASHTYPE "SHA256")
+set(STDLIB_PATH ${CMAKE_CURRENT_LIST_DIR}/stdlib)
+set(STDLIB_URL https://github.com/32blit/stdlibs/releases/download/newlib-4.2.0-gcc-12.2.0/stdlibs.zip)
+set(STDLIB_HASH "${STDLIB_HASHTYPE}=27cb9b1a2545c86139351cbc8b9db7182ba751bead13f71eae5dcab95f8080b6")
+
+if(${CMAKE_VERSION} VERSION_LESS "3.18")
+    find_program(UNZIP NAMES unzip)
+    if(NOT UNZIP)
+        message(FATAL_ERROR "Failed to find required program: \"unzip\"\n(maybe you need to \"apt install unzip\")\n")
+    endif()
+endif()
+
+# file() is great, but it doesn't tell the user what it's downloading
+if(EXISTS ${STDLIB_PATH}/stdlibs.zip)
+    file(${STDLIB_HASHTYPE} ${STDLIB_PATH}/stdlibs.zip FOUND_HASH)
+endif()
+if(NOT EXISTS ${STDLIB_PATH}/stdlibs.zip OR NOT STDLIB_HASH STREQUAL "${STDLIB_HASHTYPE}=${FOUND_HASH}")
+    # remove old files before downloading
+    file(REMOVE_RECURSE ${STDLIB_PATH}/pic/ ${STDLIB_PATH}/no-pic/)
+
+    message("Downloading stdlibs...")
+endif()
+
+file(DOWNLOAD ${STDLIB_URL} ${STDLIB_PATH}/stdlibs.zip EXPECTED_HASH ${STDLIB_HASH} SHOW_PROGRESS STATUS DOWNLOAD_STATUS)
+
+list(GET DOWNLOAD_STATUS 0 STATUS_CODE)
+
+# check for non-0 status
+if(${STATUS_CODE})
+    list(GET DOWNLOAD_STATUS 1 ERROR_MESSAGE)
+    message(FATAL_ERROR "Failed to download stdlibs: ${ERROR_MESSAGE}\n")
+endif()
+
+if(NOT EXISTS ${STDLIB_PATH}/pic)
+    message("Extracting stdlibs...")
+
+    if(${CMAKE_VERSION} VERSION_LESS "3.18")
+        execute_process(COMMAND ${UNZIP} -u ${STDLIB_PATH}/stdlibs.zip -d ${STDLIB_PATH} RESULT_VARIABLE UNZIP_STATUS)
+    else()
+        file(ARCHIVE_EXTRACT INPUT ${STDLIB_PATH}/stdlibs.zip DESTINATION ${STDLIB_PATH})
+        set(UNZIP_STATUS 0)
+    endif()
+
+    if(NOT ${UNZIP_STATUS} EQUAL 0)
+        message(FATAL_ERROR "Failed to extract stdlibs: ${UNZIP_STATUS}\n")
+    endif()
+endif()
+
+set(CMAKE_CXX_STANDARD_LIBRARIES_INIT "-nodefaultlibs -lstdc++_nano -lm -Wl,--start-group -lgcc -lc_nano -Wl,--end-group -Wl,--start-group -lgcc -lc_nano -lnosys -Wl,--end-group")
+
+set(PIC_STDLIBS "-L ${STDLIB_PATH}/pic")
+set(NOPIC_STDLIBS "-L ${STDLIB_PATH}/no-pic")
+
+add_definitions(-DTARGET_32BLIT_HW)
+set(32BLIT_HW 1)
+set(32BLIT_DIR ${CMAKE_CURRENT_LIST_DIR} CACHE PATH "Path to 32blit.cmake")
