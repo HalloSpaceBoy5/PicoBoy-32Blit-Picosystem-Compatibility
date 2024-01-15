@@ -1,0 +1,6 @@
+cmake_minimum_required(VERSION 3.9)
+project (geometry)
+find_package (32BLIT CONFIG REQUIRED PATHS ../..)
+blit_executable (geometry geometry.cpp)
+blit_metadata (geometry metadata.yml)
+blit_assets_yaml (geometry assets.yml)

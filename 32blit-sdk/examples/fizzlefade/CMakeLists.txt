@@ -1,0 +1,5 @@
+cmake_minimum_required(VERSION 3.9)
+project (fizzlefade)
+find_package (32BLIT CONFIG REQUIRED PATHS ../..)
+blit_executable (fizzlefade fizzlefade.cpp)
+blit_metadata (fizzlefade metadata.yml)
