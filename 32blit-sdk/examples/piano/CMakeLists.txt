@@ -1,0 +1,5 @@
+cmake_minimum_required(VERSION 3.8)
+project (piano)
+find_package (32BLIT CONFIG REQUIRED PATHS ../..)
+blit_executable (piano piano.cpp)
+blit_metadata (piano metadata.yml)

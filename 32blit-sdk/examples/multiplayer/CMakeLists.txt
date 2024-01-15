@@ -1,0 +1,5 @@
+cmake_minimum_required(VERSION 3.8)
+project (multiplayer)
+find_package (32BLIT CONFIG REQUIRED PATHS ../..)
+blit_executable (multiplayer multiplayer.cpp)
+blit_metadata (multiplayer metadata.yml)

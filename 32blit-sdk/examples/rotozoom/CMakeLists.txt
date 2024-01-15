@@ -1,0 +1,5 @@
+cmake_minimum_required(VERSION 3.9)
+project (rotozoom)
+find_package (32BLIT CONFIG REQUIRED PATHS ../..)
+blit_executable (rotozoom rotozoom.cpp)
+blit_metadata (rotozoom metadata.yml)
